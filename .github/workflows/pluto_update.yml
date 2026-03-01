@@ -1,19 +1,25 @@
 name: Update Pluto Playlists
 on:
   schedule:
-    - cron: '0 */6 * * *' # Runs every 6 hours
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Limit concurrency so regions don't fight to push at the exact same millisecond
+    concurrency: 
+      group: pluto-update
+      cancel-in-progress: false
     strategy:
       matrix:
-        # These correspond to the keys in the x_forward dictionary in the script
         region: [uk, ca, fr, us_east, us_west]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          # Fetch all history so rebase works correctly
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -35,10 +41,12 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add *.m3u
-          # Commit only if files changed to prevent workflow failure
+          
           if git diff --cached --quiet; then
             echo "No changes detected for region ${{ matrix.region }}"
           else
             git commit -m "Update Pluto Playlist: ${{ matrix.region }}"
-            git push
+            # Pull with rebase to handle multiple regions pushing to the same branch
+            git pull --rebase origin main
+            git push origin main
           fi
