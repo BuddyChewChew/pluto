@@ -1,0 +1,38 @@
+name: Update Pluto Playlists
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region: [uk, ca, fr, us_east, us_west]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Script
+        env:
+          PLUTO_REGION: ${{ matrix.region }}
+          PLUTO_USERNAME: ${{ secrets.PLUTO_USERNAME }}
+          PLUTO_PASSWORD: ${{ secrets.PLUTO_PASSWORD }}
+        run: python pluto_provider.py
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add *.m3u
+          git commit -m "Update Pluto Playlist: ${{ matrix.region }}" || exit 0
+          git push
