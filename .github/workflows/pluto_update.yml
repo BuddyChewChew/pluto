@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      # Ensures regions run one-by-one to avoid git push/matrix conflicts
+      # Fix: max-parallel 1 ensures jobs run one-by-one to avoid push conflicts
       max-parallel: 1
       matrix:
         region: [uk, ca, fr, us_east, us_west]
@@ -43,7 +43,7 @@ jobs:
             echo "No changes detected for region ${{ matrix.region }}"
           else
             git commit -m "Update Pluto Playlist: ${{ matrix.region }}"
-            # Pull with rebase to sync with other matrix jobs that just pushed
+            # Pull with rebase to sync with results from previous matrix runs
             git pull --rebase origin main
             git push origin main
           fi
