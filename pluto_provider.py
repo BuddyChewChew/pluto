@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 from typing import List, Dict, Any
 
-# Mocking BaseProvider for standalone execution
+# Standalone BaseProvider to ensure GitHub Action compatibility
 class BaseProvider:
     def __init__(self, name):
         self.name = name
@@ -15,7 +15,7 @@ class BaseProvider:
         return 30
 
 class PlutoProvider(BaseProvider):
-    """Provider for Pluto TV channels with Resolution and Audio Fixes"""
+    """Provider for Pluto TV with Max Resolution and Primary Audio Fixes"""
 
     def __init__(self):
         super().__init__("pluto")
@@ -23,9 +23,11 @@ class PlutoProvider(BaseProvider):
         self.session_token = None
         self.stitcher_params = ""
         self.session_expires_at = 0
-        self.username = os.getenv('PLUTO_USERNAME')
-        self.password = os.getenv('PLUTO_PASSWORD')
+        
+        # Region and Credentials
         self.region = os.getenv('PLUTO_REGION', 'us_west')
+        self.username = os.getenv('PLUTO_USERNAME', '').strip() or None
+        self.password = os.getenv('PLUTO_PASSWORD', '').strip() or None
         
         self.x_forward = {
             "local": "",
@@ -45,10 +47,8 @@ class PlutoProvider(BaseProvider):
             'user-agent': self.get_user_agent(),
         }
         
-        if self.region in self.x_forward:
-            forwarded_ip = self.x_forward[self.region]
-            if forwarded_ip:
-                self.headers["X-Forwarded-For"] = forwarded_ip
+        if self.region in self.x_forward and self.x_forward[self.region]:
+            self.headers["X-Forwarded-For"] = self.x_forward[self.region]
 
     def _get_session_token(self) -> str:
         if self.session_token and datetime.now().timestamp() < self.session_expires_at:
@@ -57,7 +57,7 @@ class PlutoProvider(BaseProvider):
             url = 'https://boot.pluto.tv/v4/start'
             params = {
                 'appName': 'web',
-                'appVersion': '8.0.0-111b2b9dc00bd0bea9030b30662159ed9e7c8bc6',
+                'appVersion': '8.0.0',
                 'deviceVersion': '122.0.0',
                 'deviceModel': 'web',
                 'deviceMake': 'chrome',
@@ -65,6 +65,7 @@ class PlutoProvider(BaseProvider):
                 'clientID': self.device_id,
                 'clientModelNumber': '1.0.0',
                 'serverSideAds': 'false',
+                'drmCapabilities': 'widevine:L3',
             }
             if self.username and self.password:
                 params['username'] = self.username
@@ -72,7 +73,7 @@ class PlutoProvider(BaseProvider):
             
             response = requests.get(url, headers=self.headers, params=params, timeout=self.get_timeout())
             data = response.json()
-            self.session_token = data.get('sessionToken')
+            self.session_token = data.get('sessionToken', '')
             self.stitcher_params = data.get('stitcherParams', '')
             self.session_expires_at = datetime.now().timestamp() + (4 * 3600)
             return self.session_token
@@ -107,17 +108,19 @@ class PlutoProvider(BaseProvider):
                         break
                 
                 group = categories_list.get(channel_id, 'General')
+                sid = str(uuid.uuid4())
                 
-                # Stream URL fix for 720p and Primary Audio
+                # FIXED: Max Resolution (720p) and Primary Audio Logic
+                # includeExtendedEvents=true is the key for high-quality manifests
+                base_stitcher = "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/v2/stitch/hls/channel"
                 if self.stitcher_params:
-                    stream_url = (f"https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/v2/stitch/hls/channel/{channel_id}/master.m3u8"
-                                  f"?{self.stitcher_params}&jwt={token}&masterJWTPassthrough=true&includeExtendedEvents=true"
-                                  f"&quality=720p&deviceMake=Chrome&deviceType=web&deviceModel=web&deviceVersion=122.0.0")
+                    stream_url = (f"{base_stitcher}/{channel_id}/master.m3u8?{self.stitcher_params}"
+                                  f"&jwt={token}&masterJWTPassthrough=true&includeExtendedEvents=true"
+                                  f"&quality=720p&deviceMake=Chrome&deviceType=web&deviceVersion=122.0.0")
                 else:
-                    sid = str(uuid.uuid4())
                     stream_url = (f"https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/{channel_id}/master.m3u8"
-                                  f"?appName=web&appVersion=8.0.0&deviceId={self.device_id}&deviceMake=Chrome&deviceModel=web"
-                                  f"&deviceType=web&deviceVersion=122.0.0&sid={sid}&serverSideAds=true&quality=720p")
+                                  f"?appName=web&appVersion=8.0.0&deviceMake=Chrome&deviceModel=web&deviceType=web"
+                                  f"&deviceVersion=122.0.0&includeExtendedEvents=true&sid={sid}&serverSideAds=true&quality=720p")
                 
                 processed_channels.append({
                     'id': str(channel_id),
@@ -132,15 +135,15 @@ class PlutoProvider(BaseProvider):
 
     def _get_categories(self, headers: dict, params: dict) -> dict:
         try:
-            category_url = "https://service-channels.clusters.pluto.tv/v2/guide/categories"
-            response = requests.get(category_url, params=params, headers=headers, timeout=self.get_timeout())
-            categories_data = response.json().get("data", [])
-            categories_list = {}
-            for elem in categories_data:
+            url = "https://service-channels.clusters.pluto.tv/v2/guide/categories"
+            response = requests.get(url, params=params, headers=headers, timeout=self.get_timeout())
+            data = response.json().get("data", [])
+            cat_map = {}
+            for elem in data:
                 cat_name = elem.get('name', 'General')
                 for cid in elem.get('channelIDs', []):
-                    categories_list[cid] = cat_name
-            return categories_list
+                    cat_map[cid] = cat_name
+            return cat_map
         except Exception:
             return {}
 
@@ -155,8 +158,8 @@ if __name__ == "__main__":
     provider = PlutoProvider()
     channels = provider.get_channels()
     epg_url = "https://github.com/matthuisman/i.mjh.nz/raw/refs/heads/master/PlutoTV/all.xml.gz"
-    playlist_content = provider.generate_m3u(channels, epg_url)
+    m3u_content = provider.generate_m3u(channels, epg_url)
     filename = f"pluto_{provider.region}.m3u"
     with open(filename, "w", encoding="utf-8") as f:
-        f.write(playlist_content)
+        f.write(m3u_content)
     print(f"Generated {filename}")
