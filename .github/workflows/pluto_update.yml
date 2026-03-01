@@ -1,7 +1,7 @@
 name: Update Pluto Playlists
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *' # Runs every 6 hours
   workflow_dispatch:
 
 jobs:
@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        # These correspond to the keys in the x_forward dictionary in the script
         region: [uk, ca, fr, us_east, us_west]
     steps:
       - name: Checkout Code
@@ -34,5 +35,10 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add *.m3u
-          git commit -m "Update Pluto Playlist: ${{ matrix.region }}" || exit 0
-          git push
+          # Commit only if files changed to prevent workflow failure
+          if git diff --cached --quiet; then
+            echo "No changes detected for region ${{ matrix.region }}"
+          else
+            git commit -m "Update Pluto Playlist: ${{ matrix.region }}"
+            git push
+          fi
