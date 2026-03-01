@@ -8,7 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      # Fix: max-parallel 1 ensures jobs run one-by-one to avoid push conflicts
       max-parallel: 1
       matrix:
         region: [uk, ca, fr, us_east, us_west]
@@ -38,12 +37,10 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add *.m3u
-          
           if git diff --cached --quiet; then
-            echo "No changes detected for region ${{ matrix.region }}"
+            echo "No changes"
           else
-            git commit -m "Update Pluto Playlist: ${{ matrix.region }}"
-            # Pull with rebase to sync with results from previous matrix runs
+            git commit -m "Update Pluto: ${{ matrix.region }}"
             git pull --rebase origin main
             git push origin main
           fi
