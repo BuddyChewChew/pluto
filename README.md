@@ -1,14 +1,3 @@
-I think its good to go. Test it and let me know if anything is up. 
-
-Playlist Type,Raw Link (Copy & Paste)
-🌍 Master (All Regions),https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_master.m3u
-🇺🇸 United States East,https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_us_east.m3u
-🇺🇸 United States West,https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_us_west.m3u
-🇨🇦 Canada,https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_ca.m3u
-🇬🇧 United Kingdom,https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_uk.m3u
-🇫🇷 France,https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_fr.m3u
-
-
 # 📺 Pluto TV Custom Playlists
 
 Automatically updated M3U playlists for Pluto TV with forced HD resolution and country-based grouping.
@@ -30,7 +19,7 @@ Automatically updated M3U playlists for Pluto TV with forced HD resolution and c
 
 ## 📅 XML TV Guide (EPG)
 
-Use this link in your IPTV player settings to load channel logos and program data.
+Fallback EPG link for your IPTV player. You shouldn't need it.
 
 | Type | Link |
 | :--- | :--- |
