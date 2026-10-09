@@ -1,8 +1,3 @@
-## 6/6/26 Script is having issues. Use playlists from.
-
-https://github.com/BuddyChewChew/app-m3u-generator
-
-
 
 # 📺 Pluto TV Custom Playlists
 
