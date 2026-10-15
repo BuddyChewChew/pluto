@@ -110,7 +110,7 @@ class PlutoProvider(BaseProvider):
                                   f"&deviceVersion=133.0.0&architecture=x86_64&buildVersion=1.0.0"
                                   f"&includeExtendedEvents=true&masterJWTPassthrough=true")
 
-                stream_url = (f"https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/v2/stitch/hls/channel/{channel_id}/master.m3u8"
+                stream_url = (f"https://ipv4.pluto.tv/api/tn/video/playout/v2/stitch/hls/channel/{channel_id}/master.m3u8"
                               f"?{self.stitcher_params}&jwt={token}{quality_suffix}")
                 
                 processed_channels.append({'id': str(channel_id), 'name': name, 'stream_url': stream_url, 'logo': logo, 'group': group})
