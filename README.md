@@ -9,21 +9,21 @@ Automatically updated M3U playlists for Pluto TV with forced HD resolution and c
 
 | Region / Type | Direct Raw M3U Link (Copy & Paste) |
 | :--- | :--- |
-| **🌍 ALL REGIONS (Sorted)** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_all.m3u` |
-| **🇺🇸 United States** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_us.m3u` |
-| **🇨🇦 Canada** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_ca.m3u` |
-| **🇬🇧 United Kingdom** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_gb.m3u` |
-| **🇫🇷 France** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_fr.m3u` |
-| **🇩🇪 Germany** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_de.m3u` |
-| **🇪🇸 Spain** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_es.m3u` |
-| **🇮🇹 Italy** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_it.m3u` |
-| **🇲🇽 Mexico** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_mx.m3u` |
-| **🇧🇷 Brazil** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_br.m3u` |
-| **🇦🇷 Argentina** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_ar.m3u` |
-| **🇨🇱 Chile** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_cl.m3u` |
-| **🇳🇴 Norway** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_no.m3u` |
-| **🇸🇪 Sweden** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_se.m3u` |
-| **🇩🇰 Denmark** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/main/pluto_dk.m3u` |
+| **🌍 ALL REGIONS (Sorted)** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_all.m3u` |
+| **🇺🇸 United States** | `https://raw.githubusercontent.com/BuddyChewChew/plutorefs/heads/main/pluto_us.m3u` |
+| **🇨🇦 Canada** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_ca.m3u` |
+| **🇬🇧 United Kingdom** | `https://raw.githubusercontent.com/BuddyChewChew/plutorefs/heads/main/pluto_gb.m3u` |
+| **🇫🇷 France** | `https://raw.githubusercontent.com/BuddyChewChew/plutorefs/heads/main/pluto_fr.m3u` |
+| **🇩🇪 Germany** | `https://raw.githubusercontent.com/BuddyChewChew/plutorefs/heads/main/pluto_de.m3u` |
+| **🇪🇸 Spain** | `https://raw.githubusercontent.com/BuddyChewChew/plutorefs/heads/main/pluto_es.m3u` |
+| **🇮🇹 Italy** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_it.m3u` |
+| **🇲🇽 Mexico** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_mx.m3u` |
+| **🇧🇷 Brazil** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_br.m3u` |
+| **🇦🇷 Argentina** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_ar.m3u` |
+| **🇨🇱 Chile** | `https://raw.githubusercontent.com/BuddyChewChew/plutorefs/heads/main/pluto_cl.m3u` |
+| **🇳🇴 Norway** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/main/pluto_no.m3u` |
+| **🇸🇪 Sweden** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_se.m3u` |
+| **🇩🇰 Denmark** | `https://raw.githubusercontent.com/BuddyChewChew/pluto/refs/heads/main/pluto_dk.m3u` |
 
 ---
 
